@@ -1,7 +1,5 @@
 const express = require('express');
 const session = require('express-session');
-const expressLayouts = require('express-ejs-layouts');
-const path = require('path'); 
 const routes = require('./controllers/routes');
 const { sequelize } = require('./models');
 
@@ -17,11 +15,7 @@ app.use(session({
 }));
 
 // Motor de vistas
-// EJS setup
-app.use(expressLayouts);
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.set('layout', 'layout');
 
 // Rutas
 app.use('/', routes);

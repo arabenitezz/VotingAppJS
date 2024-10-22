@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <!-- Bootstrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Boxicons CSS -->
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <!-- Google Fonts  -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .custom-font {
+            font-family: 'Bebas Neue', sans-serif; 
+            font-weight: bold; 
+        }
+    </style>
+    <style>
+        .custom-font2 {
+            font-family: 'Bebas Neue', sans-serif; 
+            font-weight: bold; 
+            font-size: 20px;
+        }
+    </style>
+    
+</head>
+<body class="bg-dark">
+    <div class="container py-5">
+        <h1 class="text-center mb-4 text-danger custom-font">Netflix Vote Hub</h1>
+
+        <!-- Mensajes de alerta -->
+        <% if (locals.message) { %>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <%= message %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
+
+        <!-- Contenedor principal de películas -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header text-white" style="background-color: #2a2a2b;">
+                <h3 class="card-title mb-0 custom-font">Películas</h3>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <% movies.forEach(movie => { %>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center flex-grow-1">
+                                <h5 class="mb-0"><%= movie.movies %></h5>
+                                <span class="badge bg-primary rounded-pill ms-2">
+                                    <i class="fas fa-star"></i> <%= movie.votes %>
+                                </span>
+                            </div>
+                            <div class="btn-group" role="group">
+                                <!-- Corregido: Botón de votar -->
+                                <form action="/vote/<%= movie.id %>" method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-light btn-sm">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAATxJREFUSEvt1U8rBlEUx/HPE7K0UyysbShKSZLkz3tgY483IDsLLwBrWfAi/MlGUopiYW9B2VmSf8/VTDHNnZnHw4q7us098/uec35n7tT88qr9sr5GAC04xivG8FIluUYAG1hIRMN+6ScB89jCXSLahfBsuwxSpYJBnKAVo4lgaNUzRnBeBCkDdOIC3VjEZiIW9uu4xQDuY5AiQGrqMHYxlxHZwSxOk8pyTS8CpKZeYQiPGUA7ztCHqOkxQMgsZPiAftxEWtCDS3QkFYZKv6w8QGpqG2bq5R+UTMpk3ew9POWZngV8NnUZa2VjmJyvYDXP9CzgEBMR0WzsWyRuvz7W0+lZ9qVr9DYJCEMRfPtYZd9BiEkzjVVQqPEPKG3z32rRdy7MSmN6hPGIerhGppr5H1S8KeJhVUxuCvIOTRQ/Gf2kunQAAAAASUVORK5CYII="/></button>
+                                </form>
+                                
+                                <!-- Corregido: Botón de editar -->
+                                <button type="button" class="btn btn-light btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editModal<%= movie.id %>">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAWdJREFUSEvFlLlKRDEUhr9pLOwEcQoFwUJRcasVt9Z3EsX38QnGfXkDC/cFRRQLtXCpND+cyJ0xud7ccZg0uWSG7zv5c5IKLR6VFvNpRtABLAGdwDrwHiq2rKAL2AQmDXoJzAM3jZIyAsG3gAngHngFhux7CnjISlIF3cCGi2QcOAMWgQ+gZmurDr5SVtDjYtgGhg1wbrF8mnQMWAOWywiqFovgj8AzMAjcAm/2rXVJNP+MIhEJfggMAHfucGeBFxfPLjBiJL9+kXrIjfBp4BrIdpHgfv1Xp+btoNeq9JVn4XvAqMnmbA7e2ZhA8AOg32KJwbWuHURHSCDozn/AZQ0JrgyuWbdTmav/dXPVJaeugIW/KvdbCgm+7Mc+gwiu/lfmJ9ZFdbc1NSIvkFzwfXsKjt1d0IEWhsci8oJsYYLPAE+pz3teRJ51ZGeRDI/tILXI3P8XeSqaEhaJKFVQx2yLILXi9p7BNyiKUBlj03X8AAAAAElFTkSuQmCC"/>
+                                </button>
+                                
+                                <!-- Corregido: Botón de eliminar -->
+                                <button type="button" class="btn btn-light btn-sm" 
+                                        onclick="deleteMovie(<%= movie.id %>)">
+                                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKBJREFUSEvtlTEOwjAMRV9O0a1S1aHcppfpwg3ohTgISzcEG7egQmo6BKwfgrygZHXs5287ccD5BOf4KMAInICDkcgCTMDZSlQBHkAjVF6BvhTw3BytRJRdlkgFUPY3QHT4tfe74lS6OyBmLqUnEs37xc2rgNqDfQbqFMmH+b8lugPtl1/qDehSH6tEr1U5A0Mm5AIcP61OtTIz49vX3AErpWYoGUsMhGoAAAAASUVORK5CYII="/></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Modal de edición -->
+                        <div class="modal fade" id="editModal<%= movie.id %>" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Editar Película</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Corregido: Formulario de edición -->
+                                        <form id="editForm<%= movie.id %>">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nombre de la Película</label>
+                                                <input type="text" class="form-control" 
+                                                       name="movies" value="<%= movie.movies %>" required>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="button" class="btn btn-primary" 
+                                                onclick="updateMovie(<%= movie.id %>)">Guardar Cambios</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario para agregar nueva película -->
+        <div class="card shadow-sm mb-4" style="max-width: 400px; margin: auto;">
+            <div class="card-header text-white" style="background-color: #2a2a2b;">
+                <h3 class="card-title mb-0 custom-font2">Agregar al Ranking</h3>
+            </div>
+            <div class="card-body">
+                <!-- Corregido: Formulario de agregar -->
+                <form action="/add" method="POST" class="row g-3">
+                    <div class="col-md-9">
+                        <input type="text" class="form-control" name="movie" 
+                               placeholder="Nombre de la película" required>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-light btn-sm">
+                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAhtJREFUSEu11UnoTmEUx/HPXzJEip0hlAVFSLFSrGRIQoYFSkkSsZCFvwxhJSlTyYJQYiEZoyxk2MkUyZxsFSlDhOfU89bf7b73+r/13tW99xm+5znnd35PhzY/HW3eXx2gNxZiJiZgJP7gHR7iGs7jZ7NAqwCzcCRvWnXQV1iDm2WTmgF2pEi35wXvcRZX8Cj/m4i5WIxh+d8m7CtCygCNzb9gGS7ltJQF2AOLcBx9sQEHuk4sAiKqi/iWIp6cFj/9TxFMwV0EcBruNNZ1BfTHCwzGcpwu2TwKHE/ZyTdiP56nwo9vFL7rxLU4nPL6DOOapKUK0CurKwKcjwvFSK4ilLMug8qyUwWI+XuwBcewugj4kAaGYhTeNMl9HWAqbuNBquWkIuBrVkKo4XsGNDasq3Uj1YPwEZ8wsAgIWUahByDe4+kuINZ+zuvj/R81RPVHZwU8aTFFkZb7WShji4AzSWJLsRl7WwRsxa5Ux1OpjiuKgND+SbzEGPzuZh/0TP3zGsOxBOeKgChupCkmrEwmd6KbgPXZJqJZo9F+lHXkDFxvwSrCVu5lq5iepdq05TuxO6shzO5yhUbDeyId0Vj9kkTjFIeqzK4xti0pbGf+eJvtOjr9McISwkrmZScdkuUcTnqwGEzVhTMnGd/R3N1VjRYXzircKptUd2X2SVEvwOxcuBE52lBL6P1GNrVfzSKoA9RZRO142wF/Afg0ahnLfIJIAAAAAElFTkSuQmCC"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Función para eliminar película
+        async function deleteMovie(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
+                try {
+                    const response = await fetch(`/delete/${id}`, {
+                        method: 'DELETE'
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert('Error al eliminar la película');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error al eliminar la película');
+                }
+            }
+        }
+
+        // Función para actualizar película
+        async function updateMovie(id) {
+            const form = document.getElementById(`editForm${id}`);
+            const formData = new FormData(form);
+            const movieData = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch(`/edit/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(movieData)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Error al actualizar la película');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al actualizar la película');
+            }
+        }
+    </script>
+</body>
+</html>
