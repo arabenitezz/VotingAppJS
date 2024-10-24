@@ -55,20 +55,18 @@
                                 </span>
                             </div>
                             <div class="btn-group" role="group">
-                                <!-- Corregido: Botón de votar -->
+                                <!-- Botón de votar -->
                                 <form action="/vote/<%= movie.id %>" method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-light btn-sm">
                                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAATxJREFUSEvt1U8rBlEUx/HPE7K0UyysbShKSZLkz3tgY483IDsLLwBrWfAi/MlGUopiYW9B2VmSf8/VTDHNnZnHw4q7us098/uec35n7tT88qr9sr5GAC04xivG8FIluUYAG1hIRMN+6ScB89jCXSLahfBsuwxSpYJBnKAVo4lgaNUzRnBeBCkDdOIC3VjEZiIW9uu4xQDuY5AiQGrqMHYxlxHZwSxOk8pyTS8CpKZeYQiPGUA7ztCHqOkxQMgsZPiAftxEWtCDS3QkFYZKv6w8QGpqG2bq5R+UTMpk3ew9POWZngV8NnUZa2VjmJyvYDXP9CzgEBMR0WzsWyRuvz7W0+lZ9qVr9DYJCEMRfPtYZd9BiEkzjVVQqPEPKG3z32rRdy7MSmN6hPGIerhGppr5H1S8KeJhVUxuCvIOTRQ/Gf2kunQAAAAASUVORK5CYII="/></button>
-                                </form>
-                                
-                                <!-- Corregido: Botón de editar -->
+                                </form>                              
+                                <!-- Botón de editar -->
                                 <button type="button" class="btn btn-light btn-sm" 
                                         data-bs-toggle="modal" 
                                         data-bs-target="#editModal<%= movie.id %>">
                                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAWdJREFUSEvFlLlKRDEUhr9pLOwEcQoFwUJRcasVt9Z3EsX38QnGfXkDC/cFRRQLtXCpND+cyJ0xud7ccZg0uWSG7zv5c5IKLR6VFvNpRtABLAGdwDrwHiq2rKAL2AQmDXoJzAM3jZIyAsG3gAngHngFhux7CnjISlIF3cCGi2QcOAMWgQ+gZmurDr5SVtDjYtgGhg1wbrF8mnQMWAOWywiqFovgj8AzMAjcAm/2rXVJNP+MIhEJfggMAHfucGeBFxfPLjBiJL9+kXrIjfBp4BrIdpHgfv1Xp+btoNeq9JVn4XvAqMnmbA7e2ZhA8AOg32KJwbWuHURHSCDozn/AZQ0JrgyuWbdTmav/dXPVJaeugIW/KvdbCgm+7Mc+gwiu/lfmJ9ZFdbc1NSIvkFzwfXsKjt1d0IEWhsci8oJsYYLPAE+pz3teRJ51ZGeRDI/tILXI3P8XeSqaEhaJKFVQx2yLILXi9p7BNyiKUBlj03X8AAAAAElFTkSuQmCC"/>
-                                </button>
-                                
-                                <!-- Corregido: Botón de eliminar -->
+                                </button>                               
+                                <!-- Botón de eliminar -->
                                 <button type="button" class="btn btn-light btn-sm" 
                                         onclick="deleteMovie(<%= movie.id %>)">
                                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAKBJREFUSEvtlTEOwjAMRV9O0a1S1aHcppfpwg3ohTgISzcEG7egQmo6BKwfgrygZHXs5287ccD5BOf4KMAInICDkcgCTMDZSlQBHkAjVF6BvhTw3BytRJRdlkgFUPY3QHT4tfe74lS6OyBmLqUnEs37xc2rgNqDfQbqFMmH+b8lugPtl1/qDehSH6tEr1U5A0Mm5AIcP61OtTIz49vX3AErpWYoGUsMhGoAAAAASUVORK5CYII="/></i>
@@ -85,7 +83,7 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <!-- Corregido: Formulario de edición -->
+                                        <!-- Formulario de edición -->
                                         <form id="editForm<%= movie.id %>">
                                             <div class="mb-3">
                                                 <label class="form-label">Nombre de la Película</label>
@@ -113,7 +111,7 @@
                 <h3 class="card-title mb-0 custom-font2">Agregar al Ranking</h3>
             </div>
             <div class="card-body">
-                <!-- Corregido: Formulario de agregar -->
+                <!-- Formulario de agregar -->
                 <form action="/add" method="POST" class="row g-3">
                     <div class="col-md-9">
                         <input type="text" class="form-control" name="movie" 
@@ -132,52 +130,71 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Función para eliminar película
+        // Función para eliminar una película
         async function deleteMovie(id) {
+            // Muestra un cuadro de confirmación para verificar si el usuario desea eliminar la película
             if (confirm('¿Estás seguro de que deseas eliminar esta película?')) {
                 try {
+                    // Realiza una solicitud DELETE a la ruta específica para eliminar la película por ID
                     const response = await fetch(`/delete/${id}`, {
-                        method: 'DELETE'
+                        method: 'DELETE' // Método de la solicitud HTTP
                     });
+    
+                    // Espera la respuesta y la convierte a formato JSON
                     const data = await response.json();
+                    // Verifica si la respuesta fue exitosa
                     if (response.ok) {
+                        // Recarga la página para reflejar los cambios
                         window.location.reload();
                     } else {
+                        // Muestra un mensaje de error si la eliminación falla
                         alert('Error al eliminar la película');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
-                    alert('Error al eliminar la película');
+                    // Maneja cualquier error que ocurra durante la solicitud
+                    console.error('Error:', error); // Imprime el error en la consola
+                    alert('Error al eliminar la película'); // Muestra un mensaje de error
                 }
             }
         }
-
-        // Función para actualizar película
+    
+        // Función para actualizar una película
         async function updateMovie(id) {
+            // Obtiene el formulario específico de la película a actualizar utilizando su ID
             const form = document.getElementById(`editForm${id}`);
+            // Crea un objeto FormData a partir del formulario para obtener los datos
             const formData = new FormData(form);
+            // Convierte los datos del formulario en un objeto
             const movieData = Object.fromEntries(formData.entries());
-
+    
             try {
+                // Realiza una solicitud PUT a la ruta específica para actualizar la película por ID
                 const response = await fetch(`/edit/${id}`, {
-                    method: 'PUT',
+                    method: 'PUT', // Método de la solicitud HTTP
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json' // Especifica que el contenido es JSON
                     },
+                    // Convierte el objeto de datos de la película en una cadena JSON para enviarlo
                     body: JSON.stringify(movieData)
                 });
-
+    
+                // Espera la respuesta y la convierte a formato JSON
                 const data = await response.json();
+                // Verifica si la respuesta fue exitosa
                 if (response.ok) {
+                    // Recarga la página para reflejar los cambios
                     window.location.reload();
                 } else {
+                    // Muestra un mensaje de error si la actualización falla
                     alert('Error al actualizar la película');
                 }
             } catch (error) {
-                console.error('Error:', error);
-                alert('Error al actualizar la película');
+                // Maneja cualquier error que ocurra durante la solicitud
+                console.error('Error:', error); // Imprime el error en la consola
+                alert('Error al actualizar la película'); // Muestra un mensaje de error
             }
         }
     </script>
+    
 </body>
 </html>
